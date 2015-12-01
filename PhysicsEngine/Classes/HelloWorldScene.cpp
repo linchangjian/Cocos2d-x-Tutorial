@@ -12,6 +12,9 @@ Scene* HelloWorld::createScene()
     auto scene = Scene::createWithPhysics();
     scene->getPhysicsWorld()->setDebugDrawMask( PhysicsWorld::DEBUGDRAW_ALL );
     
+    //设置重力加速度
+    //	scene->getPhysicsWorld()->setGravity(Vec2(0,0));
+    
     // 'layer' is an autorelease object
     auto layer = HelloWorld::create();
     layer->SetPhysicsWorld(scene->getPhysicsWorld());
@@ -46,8 +49,12 @@ bool HelloWorld::init()
     
     auto sprite = Sprite::create("shana.png");
     sprite->setPosition(Point(visiableSize.width/2+origin.x,visiableSize.height/2+origin.y));
-    auto spriteBody = PhysicsBody::createBox(sprite->getContentSize(),PhysicsMaterial(100, 1, 50));
+    auto spriteBody = PhysicsBody::createBox(sprite->getContentSize(),PhysicsMaterial(0, 1, 0));
+    
+    //设置是否是动态的物体
+    spriteBody->setDynamic(true);
     sprite->setPhysicsBody(spriteBody);
+    
     
     this->addChild(sprite);
     return true;
