@@ -46,16 +46,50 @@ bool HelloWorld::init()
     edgeNode->setPhysicsBody(edgeBody);
     
     this->addChild(edgeNode);
+    {
+        auto sprite = Sprite::create("shana.png");
+        sprite->setPosition(Point(visiableSize.width/2+origin.x,visiableSize.height/2+origin.y));
+        auto spriteBody = PhysicsBody::createBox(sprite->getContentSize(),PhysicsMaterial(0, 1, 0));
+        spriteBody->setCollisionBitmask(1);
+        spriteBody->setContactTestBitmask(true);
+        //设置是否是动态的物体
+        spriteBody->setDynamic(true);
+        sprite->setPhysicsBody(spriteBody);
+
+        this->addChild(sprite);
+    }
     
-    auto sprite = Sprite::create("shana.png");
-    sprite->setPosition(Point(visiableSize.width/2+origin.x,visiableSize.height/2+origin.y));
-    auto spriteBody = PhysicsBody::createBox(sprite->getContentSize(),PhysicsMaterial(0, 1, 0));
+    {
+        auto sprite = Sprite::create("shana.png");
+        sprite->setPosition(Point(visiableSize.width/2+origin.x,visiableSize.height/2+ origin.y+200));
+        auto spriteBody = PhysicsBody::createBox(sprite->getContentSize(),PhysicsMaterial(0, 1, 0));
+        
+        spriteBody->setCollisionBitmask(2);
+        spriteBody->setContactTestBitmask(true);
+        //设置是否是动态的物体
+        spriteBody->setDynamic(true);
+        sprite->setPhysicsBody(spriteBody);
+        
+        this->addChild(sprite);
+    }
     
-    //设置是否是动态的物体
-    spriteBody->setDynamic(true);
-    sprite->setPhysicsBody(spriteBody);
-    
-    
-    this->addChild(sprite);
+    auto contactListener = EventListenerPhysicsContact::create();
+    contactListener->onContactBegin = CC_CALLBACK_1(HelloWorld::onContactBegin, this);
+    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
     return true;
+}
+
+bool HelloWorld::onContactBegin(cocos2d::PhysicsContact &contact)
+{
+    PhysicsBody *a = contact.getShapeA()->getBody();
+    PhysicsBody *b = contact.getShapeB()->getBody();
+    
+    //check if the bodies have collided;
+    if((1 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) ||
+     (1 == b->getCollisionBitmask() && 2 == a->getCollisionBitmask()))
+    {
+           CCLOG("COLLISION HAS OCCURED");
+        return true;
+    }
+       return false;
 }
