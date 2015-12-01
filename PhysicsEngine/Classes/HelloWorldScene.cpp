@@ -46,24 +46,29 @@ bool HelloWorld::init()
     edgeNode->setPhysicsBody(edgeBody);
     
     this->addChild(edgeNode);
-    {
-        auto sprite = Sprite::create("shana.png");
-        sprite->setPosition(Point(visiableSize.width/2+origin.x,visiableSize.height/2+origin.y));
-        auto spriteBody = PhysicsBody::createBox(sprite->getContentSize(),PhysicsMaterial(0, 1, 0));
-        spriteBody->setCollisionBitmask(1);
-        spriteBody->setContactTestBitmask(true);
-        //设置是否是动态的物体
-        spriteBody->setDynamic(true);
-        sprite->setPhysicsBody(spriteBody);
-
-        this->addChild(sprite);
-    }
+//    {
+//        auto sprite = Sprite::create("shana.png");
+//        sprite->setPosition(Point(visiableSize.width/2+origin.x,visiableSize.height/2+origin.y));
+//        auto spriteBody = PhysicsBody::createBox(sprite->getContentSize(),PhysicsMaterial(0, 1, 0));
+//        spriteBody->setCollisionBitmask(1);
+//        spriteBody->setContactTestBitmask(true);
+//        //设置是否是动态的物体
+//        spriteBody->setDynamic(true);
+//        sprite->setPhysicsBody(spriteBody);
+//
+//        this->addChild(sprite);
+//    }
     
     {
         auto sprite = Sprite::create("shana.png");
         sprite->setPosition(Point(visiableSize.width/2+origin.x,visiableSize.height/2+ origin.y+200));
         auto spriteBody = PhysicsBody::createBox(sprite->getContentSize(),PhysicsMaterial(0, 1, 0));
         
+        //提供角速度
+        spriteBody->setAngularVelocity(400);
+        //角速度衰减
+        spriteBody->setAngularDamping(1);
+        spriteBody->setAngularVelocityLimit(500);
         spriteBody->setCollisionBitmask(2);
         spriteBody->setContactTestBitmask(true);
         //设置是否是动态的物体
